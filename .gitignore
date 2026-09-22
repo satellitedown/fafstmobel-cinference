@@ -13,6 +13,4 @@ __pycache__/
 *.bin
 *.gguf
 *.ninfer
-*.ninfer.part-*
-.v3-prepare-*/
-.cinference-prepare.lock
+.cinference-download.lock

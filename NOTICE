@@ -18,16 +18,16 @@ source patches. Retain its license and third-party notices.
 
 Model artifact
 --------------
+Original NVFP4 artifact:
 Barding-Defense/Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer:
 https://huggingface.co/Barding-Defense/Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer
-Pinned artifact revision: 228612d2a1f48c9e1b6f5e102f369c133c0f6eec
+Original artifact revision: 228612d2a1f48c9e1b6f5e102f369c133c0f6eec
 
-The publisher identifies this artifact as Apache-2.0 and retains the
-upstream checkpoint's LICENSE, including Copyright 2026 Alibaba Cloud.
-The recipe downloads and verifies that LICENSE and the publisher NOTICE,
-along with the model, artifact manifest, and conversion report. Those
-original files are retained unchanged. They are authoritative for the
-artifact's licensing and provenance.
+The installed model is a ready-to-use NInfer v3 repackaging. Its repository,
+immutable revision and file checksums are recorded in runtime-manifest.json.
+The recipe downloads and verifies its LICENSE, NOTICE and provenance record.
+The source publisher's Apache-2.0 license and Copyright 2026 Alibaba Cloud
+notice are retained unchanged. Original publisher records are included in source/.
 
 Artifact derivation and additional credit
 ----------------------------------------
@@ -48,16 +48,16 @@ Artifact derivation and additional credit
 - NVIDIA: CUDA and Blackwell hardware support; downloaded CUDA components
   retain their own license terms.
 
-Recipe preparation changes
---------------------------
-The recipe uses the pinned runtime's standard-library Python upgrader to
-convert the publisher's NInfer v2 container to v3. Weight bytes are
-preserved and the runtime's maintained Qwen3.8 chat template is installed.
-The original artifact remains in place. The prepared artifact is stored
-separately in v3/, alongside copies of the publisher LICENSE and NOTICE.
-The generated upgrade-receipt.json records input/output identity and
-checksums, upgrader provenance, and this statement of changes. It is not
-a replacement for the publisher's original conversion report.
+Model publication changes
+-------------------------
+The publisher's NInfer v2 container is converted to v3 once, before publication,
+using the pinned Cinference runtime's standard-library Python upgrader. Original
+tensor payload bytes are preserved and the maintained Qwen3.8 chat template is
+installed. The recipe downloads the resulting artifact directly.
+
+The published provenance.json records input/output identity and checksums,
+conversion-tool provenance, and the statement of changes. The original
+Barding-Defense conversion report is retained separately under source/.
 
 This is an unofficial community recipe, not an endorsement by or
 affiliation with Alibaba Cloud, Huihui AI, Barding-Defense, Unsloth,

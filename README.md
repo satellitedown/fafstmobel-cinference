@@ -18,10 +18,10 @@ bash setup.sh
 
 ![Cinference setup menu](assets/setup-menu.png)
 
-1. Choose **1** to install everything, download the model, and prepare it automatically. Allow **43 GB for model files**, plus software.
+1. Choose **1** to install everything and download the model. Allow **~21.5 GB for model files**, plus software.
 2. Choose **3** to start the server. Leave the terminal open while using it.
 
-Choose **2** to resume an interrupted download or preparation. **Ctrl+C** stops the server. Setup never starts it automatically or changes your NVIDIA driver.
+Choose **2** to download the model or resume an interrupted download. **Ctrl+C** stops the server.
 
 ## Connect to your favorite AI app
 
@@ -44,4 +44,4 @@ Huihui Qwen3.8-27B Abliterated NVFP4. Generation speed on synthetic recall, thin
 
 ## Credits
 
-Cinference, NInfer, Qwen, Huihui AI, and Barding-Defense. [Model](https://huggingface.co/Barding-Defense/Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer) · [Settings](runtime-manifest.json) · [Attribution](NOTICE).
+Cinference, NInfer, Qwen, Huihui AI, and Barding-Defense. [Model](https://huggingface.co/satellitedown/Huihui-Qwen3.8-27B-abliterated-NVFP4-NInfer-v3) · [Settings](runtime-manifest.json) · [Attribution](NOTICE).

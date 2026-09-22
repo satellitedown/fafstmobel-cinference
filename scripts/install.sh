@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # Install pinned Python tools and runtime source, optionally building the server.
-# This script never downloads a model, starts a server, or changes a system service.
 set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
@@ -11,26 +10,24 @@ fail() {
 
 if [[ "${1:-}" == --help || "${1:-}" == -h ]]; then
   cat <<'HELP'
-Usage: bash scripts/install.sh [--prepare-only]
+Usage: bash scripts/install.sh [--download-only]
 Install the locked Python 3.12 tools and pinned Cinference source.
 Normally, also install the isolated CUDA SDK and build
-runtime/ninfer/build/apps/ninfer-serve. --prepare-only skips CUDA and compilation,
-providing the CPU-only download/format-upgrade prerequisites for menu option 2.
-No model or service is started.
+runtime/ninfer/build/apps/ninfer-serve. --download-only installs just the
+Python tools for menu option 2, without runtime source, CUDA, or compilation.
 Run bash setup.sh to install missing system build prerequisites with permission.
-A CUDA-compatible NVIDIA driver is required to build and serve, not to prepare.
+A CUDA-compatible NVIDIA driver is required to build and serve, not to download.
 HELP
   exit 0
 fi
-PREPARE_ONLY=0
-if [[ $# == 1 && "$1" == --prepare-only ]]; then
-  PREPARE_ONLY=1
+DOWNLOAD_ONLY=0
+if [[ $# == 1 && "$1" == --download-only ]]; then
+  DOWNLOAD_ONLY=1
 elif [[ $# != 0 ]]; then
   fail 'Unexpected arguments; use --help for usage.'
 fi
 [[ "$(uname -s)" == Linux && "$(uname -m)" == x86_64 ]] || fail 'This recipe requires Linux x86_64.'
 
-command -v git >/dev/null || fail 'Missing git. Install it or run bash setup.sh and choose 1.'
 
 if [[ -x "$ROOT/.tools/bin/uv" ]]; then
   UV="$ROOT/.tools/bin/uv"
@@ -39,15 +36,23 @@ elif command -v uv >/dev/null; then
 else
   fail 'uv is missing. Run bash setup.sh to bootstrap the local tool.'
 fi
-for directory in "$ROOT/.venv" "$ROOT/runtime" "$ROOT/runtime/ninfer"; do
-  [[ ! -L "$directory" ]] || fail "Refusing to modify a symlinked installation directory: $directory. Use a repository-local installation."
-done
+[[ ! -L "$ROOT/.venv" ]] || fail "Refusing to modify a symlinked installation directory: $ROOT/.venv. Use a repository-local installation."
 if [[ ! -x "$ROOT/.venv/bin/python" ]]; then
   [[ ! -e "$ROOT/.venv" ]] || fail 'An incomplete .venv already exists. Move it aside before installing; no files were removed.'
   "$UV" venv --python 3.12 "$ROOT/.venv"
 fi
 PYTHON="$ROOT/.venv/bin/python"
 "$PYTHON" -c 'import sys; sys.exit(0 if sys.version_info[:2] == (3, 12) else "This recipe requires Python 3.12; move the existing .venv aside and rerun setup.")'
+"$UV" pip install --python "$PYTHON" --no-deps -r "$ROOT/requirements.lock"
+if [[ "$DOWNLOAD_ONLY" == 1 ]]; then
+  printf '\nDownload tools are ready.\n'
+  exit 0
+fi
+
+command -v git >/dev/null || fail 'Missing git. Install it or run bash setup.sh and choose 1.'
+for directory in "$ROOT/runtime" "$ROOT/runtime/ninfer"; do
+  [[ ! -L "$directory" ]] || fail "Refusing to modify a symlinked installation directory: $directory. Use a repository-local installation."
+done
 
 runtime_config="$("$PYTHON" - "$ROOT/runtime-manifest.json" <<'PY'
 import json
@@ -88,11 +93,6 @@ if [[ "$(git -C "$SOURCE" rev-parse --verify HEAD 2>/dev/null || true)" != "$REV
   git -C "$SOURCE" checkout --detach "$REVISION"
 fi
 
-"$UV" pip install --python "$PYTHON" --no-deps -r "$ROOT/requirements.lock"
-if [[ "$PREPARE_ONLY" == 1 ]]; then
-  printf '\nCPU-only download and v2-to-v3 preparation tools are ready. No build or model was started.\n'
-  exit 0
-fi
 
 [[ ! -L "$ROOT/.cuda-toolkit" ]] || fail 'Refusing to modify a symlinked .cuda-toolkit directory.'
 command -v pkg-config >/dev/null || fail 'Missing pkg-config. Run bash setup.sh and choose 1.'
@@ -153,4 +153,4 @@ if ! "$ROOT/.venv/bin/cmake" -S "$SOURCE" -B "$BUILD" -G Ninja \
   fail 'CMake configuration failed. Check the error above, the C++20 compiler/CUDA compatibility, and FFmpeg/libcurl development packages. If this build directory belongs to another toolchain or location, move runtime/ninfer/build aside and rerun; it was not deleted.'
 fi
 "$ROOT/.venv/bin/cmake" --build "$BUILD" --target ninfer-serve --parallel "${runtime_values[5]}"
-printf '\nBuilt the native server. No model or service was started.\nNext: .venv/bin/python scripts/download_models.py\nThen, when ready: bash scripts/serve.sh\n'
+printf '\nBuilt the native server.\nNext: .venv/bin/python scripts/download_models.py\nThen: bash scripts/serve.sh\n'

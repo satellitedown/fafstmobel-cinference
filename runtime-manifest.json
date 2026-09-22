@@ -10,20 +10,22 @@
   },
   "models": {
     "target": {
-      "repo_id": "Barding-Defense/Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer",
-      "revision": "228612d2a1f48c9e1b6f5e102f369c133c0f6eec",
-      "directory": "Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer",
-      "source_filename": "qwen3_8_27b_huihui_abliterated_nvfp4.ninfer",
-      "filename": "v3/qwen3_8_27b_huihui_abliterated_nvfp4.ninfer",
-      "source_format_version": 2,
+      "repo_id": "satellitedown/Huihui-Qwen3.8-27B-abliterated-NVFP4-NInfer-v3",
+      "revision": "12fe3b16d82541dad06288b0da629933efebb6cd",
+      "directory": "Huihui-Qwen3.8-27B-abliterated-NVFP4-NInfer-v3",
+      "filename": "qwen3_8_27b_huihui_abliterated_nvfp4.ninfer",
       "format_version": 3,
-      "size_bytes": 21492695040,
+      "size_bytes": 21492938224,
       "files": {
-        "qwen3_8_27b_huihui_abliterated_nvfp4.ninfer": "02c0c80616e2dd353133355d840aa6418d83f4c523369ad93b426e6c5bbc83c8",
+        "qwen3_8_27b_huihui_abliterated_nvfp4.ninfer": "3876a052290d48171350a299eac3bcdbfeeac69f58efd11747d7f9509f7b54ee",
         "LICENSE": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
-        "NOTICE": "1fc20d0b782c81159c05ef799d70e912a1941271bb74240ad3781ac1634ef9e4",
-        "artifact-manifest.json": "9886c2d4c3c187d2ddc19c113f8642741329837c3f1e58870af748bc6dff1c3d",
-        "qwen3_8_27b_nvfp4.ninfer.conversion.json": "73a2cf5860bfd039f829223cc1bbcb12ea726e4e084280a530965e436cc0a393"
+        "NOTICE": "9b905665ed937f1521e4659eafc1af8743379fefe90f7cfe3a95a650351a0580",
+        "README.md": "ec16b736a2d446f2edd2bc243af98e6591573cfa6f5be6cfa0fd3dce87865cf2",
+        "provenance.json": "fecb87f68cc58844d8c82b975b754e26b8f446d50fe81ce0f99925b60570e8e9",
+        "SHA256SUMS": "3378d13f91fbaab5cb86e5ef12ac265433baf2fed866d7a74d53ebabdbe70e56",
+        "source/NOTICE": "1fc20d0b782c81159c05ef799d70e912a1941271bb74240ad3781ac1634ef9e4",
+        "source/artifact-manifest.json": "9886c2d4c3c187d2ddc19c113f8642741329837c3f1e58870af748bc6dff1c3d",
+        "source/qwen3_8_27b_nvfp4.ninfer.conversion.json": "73a2cf5860bfd039f829223cc1bbcb12ea726e4e084280a530965e436cc0a393"
       }
     }
   },

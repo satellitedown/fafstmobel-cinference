@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Interactive installer; serving is a separate, explicitly selected action.
+# Install, download, or start the foreground server.
 set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 export PATH="$ROOT/.tools/bin:$PATH"
 
 if [[ "${1:-}" == --help || "${1:-}" == -h ]]; then
-  printf 'Usage: bash setup.sh\n\nChoose 1 to build Cinference, download Huihui Qwen3.8-27B NVFP4, and prepare v3.\nChoose 2 to install CPU-only prerequisites and resume download/preparation.\nChoose 3 separately to start the model with MTP-10.\nServing requires Linux x86_64 and an RTX 5090 with working NVIDIA drivers.\nAllow about 21.5 GB for the original model plus 21.5 GB for v3 and build tools.\nSetup never starts a model or changes NVIDIA drivers/services.\n'
+  printf 'Usage: bash setup.sh\n\nChoose 1 to install Cinference and download Huihui Qwen3.8-27B NVFP4.\nChoose 2 to download or resume the model download.\nChoose 3 to start the server with MTP-10.\nServing requires Linux x86_64 and an RTX 5090 with working NVIDIA drivers.\nAllow about 21.5 GB for model files, plus software.\n'
   exit 0
 fi
 if [[ $# -ne 0 || ! -t 0 ]]; then
@@ -19,7 +19,7 @@ interrupt_setup() {
     kill -TERM -- "-$active_step" 2>/dev/null || true
     wait "$active_step" 2>/dev/null || true
   fi
-  printf '\nInterrupted. Choose 1 to continue setup or 2 to resume download/preparation.\n'
+  printf '\nInterrupted. Choose 1 to continue installation or 2 to resume the download.\n'
   exit 130
 }
 trap interrupt_setup INT
@@ -137,14 +137,14 @@ ensure_uv() {
 
 download_models() {
   local command
-  for command in curl git setsid; do
+  for command in curl setsid; do
     if ! command -v "$command" >/dev/null; then
       printf 'Missing %s. Install it, or choose 1 for system prerequisite setup.\n' "$command" >&2
       return 1
     fi
   done
   ensure_uv || return 1
-  run_step bash "$ROOT/scripts/install.sh" --prepare-only || return 1
+  run_step bash "$ROOT/scripts/install.sh" --download-only || return 1
   run_step "$ROOT/.venv/bin/python" "$ROOT/scripts/download_models.py"
 }
 
@@ -154,20 +154,19 @@ install_everything() {
   ensure_uv || return 1
   printf '\n[1/2] Installing local tools and building the pinned Cinference runtime...\n'
   run_step bash "$ROOT/scripts/install.sh" || return 1
-  printf '\n[2/2] Downloading Huihui NVFP4, verifying publisher files, and preparing v3...\n'
+  printf '\n[2/2] Downloading and verifying Huihui NVFP4...\n'
   run_step "$ROOT/.venv/bin/python" "$ROOT/scripts/download_models.py" || return 1
-  printf '\nSetup complete. No model has been started. Choose 3 when ready.\n'
+  printf '\nInstallation complete. Choose 3 to start the server.\n'
 }
 
 while true; do
   printf '\nFast Long Context - Cinference\n'
   printf 'Huihui Qwen3.8-27B / RTX 5090, K8V4 KV, MTP-10\n\n'
-  printf '  1) Set up everything (build + download + prepare v3)\n'
-  printf '  2) Download / resume / prepare model (CPU-only)\n'
+  printf '  1) Install everything (build + download)\n'
+  printf '  2) Download / resume model\n'
   printf '  3) Start the server (Ctrl-C to stop)\n'
   printf '  0) Exit\n\n'
-  printf 'Space: ~21.5 GB source + ~21.5 GB v3, plus CUDA/build tools.\n'
-  printf 'Setup never starts a model. Choose 3 separately when ready.\n'
+  printf 'Space: ~21.5 GB model files, plus software.\n'
   if ! read -r -p "Choose an option: " choice; then
     printf '\n'
     exit 0
@@ -180,7 +179,7 @@ while true; do
       ;;
     2)
       if ! download_models; then
-        printf '\nDownload/preparation did not finish. Fix the error above, then retry.\n' >&2
+        printf '\nDownload did not finish. Fix the error above, then retry.\n' >&2
       fi
       ;;
     3)

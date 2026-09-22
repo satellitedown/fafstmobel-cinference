@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One GPU, one request. Foreground only; no service management or automatic launch.
+# One GPU, one request, foreground server.
 set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
@@ -8,12 +8,11 @@ for argument in "$@"; do
   if [[ "$argument" == --help || "$argument" == -h ]]; then
     cat <<'HELP'
 Usage: bash scripts/serve.sh [additional native server arguments]
-  MODEL_PATH     Prepared v3 .ninfer artifact (default: manifest's models/ location)
+  MODEL_PATH     v3 .ninfer artifact (default: manifest's models/ location)
   HOST / PORT    Bind address (default: 127.0.0.1 / 8000)
 Uses the pinned Huihui NVFP4 / Cinference MTP-10 profile from runtime-manifest.json.
-Extra native server arguments follow the profile. Starts only in the foreground.
+Extra native server arguments follow the profile. Runs in the foreground.
 Stop with Ctrl-C. The API has no authentication; keep it on loopback.
---help prints this message without loading a model or starting a server.
 HELP
     exit 0
   fi
@@ -22,7 +21,7 @@ done
 PYTHON="$ROOT/.venv/bin/python"
 SERVER="$ROOT/runtime/ninfer/build/apps/ninfer-serve"
 if [[ ! -x "$PYTHON" || ! -x "$SERVER" ]]; then
-  printf 'The native server is not installed. Run bash setup.sh and choose install/build.\n' >&2
+  printf 'The native server is not installed. Run bash setup.sh and choose 1.\n' >&2
   exit 1
 fi
 export CUDA_HOME="$ROOT/.cuda-toolkit/nvidia/cu13"
@@ -61,7 +60,7 @@ MODEL_PATH="${MODEL_PATH:-$ROOT/models/${profile_args[0]}}"
 HOST="${HOST:-${profile_args[1]}}"
 PORT="${PORT:-${profile_args[2]}}"
 if [[ ! -f "$MODEL_PATH" || ! -r "$MODEL_PATH" ]]; then
-  printf 'Prepared v3 model is missing or unreadable: %s\nRun bash setup.sh and choose 2 to download/prepare, or set MODEL_PATH to a v3 artifact.\n' "$MODEL_PATH" >&2
+  printf 'Model is missing or unreadable: %s\nRun bash setup.sh and choose 2 to download, or set MODEL_PATH to a v3 artifact.\n' "$MODEL_PATH" >&2
   exit 1
 fi
 
