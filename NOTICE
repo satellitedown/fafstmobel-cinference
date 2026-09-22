@@ -1,0 +1,64 @@
+Fast Long Context - Cinference
+https://github.com/satellitedown/fast-long-context-cinference
+
+This repository provides an Apache-2.0 installation recipe. It does not
+redistribute model weights. Its license does not replace the licenses of
+downloaded software or model artifacts.
+
+Runtime
+-------
+Cinference, the modified NInfer runtime used by this recipe:
+https://github.com/satellitedown/cinference
+NInfer, by the Neroued/ninfer contributors:
+https://github.com/Neroued/ninfer
+The immutable runtime revision is recorded in runtime-manifest.json.
+Native executable names, API symbols and the .ninfer container name remain
+NInfer names. This recipe builds the pinned fork without applying local
+source patches. Retain its license and third-party notices.
+
+Model artifact
+--------------
+Barding-Defense/Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer:
+https://huggingface.co/Barding-Defense/Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer
+Pinned artifact revision: 228612d2a1f48c9e1b6f5e102f369c133c0f6eec
+
+The publisher identifies this artifact as Apache-2.0 and retains the
+upstream checkpoint's LICENSE, including Copyright 2026 Alibaba Cloud.
+The recipe downloads and verifies that LICENSE and the publisher NOTICE,
+along with the model, artifact manifest, and conversion report. Those
+original files are retained unchanged. They are authoritative for the
+artifact's licensing and provenance.
+
+Artifact derivation and additional credit
+----------------------------------------
+- Qwen / Alibaba Cloud: Qwen/Qwen3.8-27B, the upstream base model.
+- Huihui AI: huihui-ai/Huihui-Qwen3.8-27B-abliterated, revision
+  739e3c5b89849f6c238ce1e5b70008612ae42cdd, the abliterated derivative.
+- Barding-Defense: mixed NVFP4 / FP8 / BF16 quantization and publication
+  of the NInfer v2 artifact. The publisher reports no fine-tuning,
+  re-abliteration, or behavioral modification during quantization.
+- NInfer: container format and converter, publisher conversion revision
+  a140e7ae82a11ed2f370a4d8f2cc16268a3790b8. The publisher describes a
+  provenance-constant patch in its NOTICE and artifact manifest.
+- Unsloth: unsloth/Qwen3.8-27B-NVFP4 quantization configuration.
+- llm-compressor / compressed-tensors contributors: quantization tooling.
+- HuggingFaceH4/ultrachat_200k: MIT-licensed calibration data. The publisher
+  reports using 32 samples at sequence length 2048; no dataset content is
+  reproduced in the artifact.
+- NVIDIA: CUDA and Blackwell hardware support; downloaded CUDA components
+  retain their own license terms.
+
+Recipe preparation changes
+--------------------------
+The recipe uses the pinned runtime's standard-library Python upgrader to
+convert the publisher's NInfer v2 container to v3. Weight bytes are
+preserved and the runtime's maintained Qwen3.8 chat template is installed.
+The original artifact remains in place. The prepared artifact is stored
+separately in v3/, alongside copies of the publisher LICENSE and NOTICE.
+The generated upgrade-receipt.json records input/output identity and
+checksums, upgrader provenance, and this statement of changes. It is not
+a replacement for the publisher's original conversion report.
+
+This is an unofficial community recipe, not an endorsement by or
+affiliation with Alibaba Cloud, Huihui AI, Barding-Defense, Unsloth,
+NVIDIA, or the NInfer project. Qwen is a trademark of Alibaba Cloud.

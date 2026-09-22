@@ -1,0 +1,45 @@
+{
+  "name": "Fast Long Context - Cinference",
+  "runtime": {
+    "repo_id": "satellitedown/cinference",
+    "revision": "b74044fb0a319cd2a737cb7108012e6344b96dac",
+    "cuda_architectures": "120a",
+    "cuda_version": "13.4.92",
+    "build_type": "Release",
+    "build_jobs": 2
+  },
+  "models": {
+    "target": {
+      "repo_id": "Barding-Defense/Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer",
+      "revision": "228612d2a1f48c9e1b6f5e102f369c133c0f6eec",
+      "directory": "Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer",
+      "source_filename": "qwen3_8_27b_huihui_abliterated_nvfp4.ninfer",
+      "filename": "v3/qwen3_8_27b_huihui_abliterated_nvfp4.ninfer",
+      "source_format_version": 2,
+      "format_version": 3,
+      "size_bytes": 21492695040,
+      "files": {
+        "qwen3_8_27b_huihui_abliterated_nvfp4.ninfer": "02c0c80616e2dd353133355d840aa6418d83f4c523369ad93b426e6c5bbc83c8",
+        "LICENSE": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
+        "NOTICE": "1fc20d0b782c81159c05ef799d70e912a1941271bb74240ad3781ac1634ef9e4",
+        "artifact-manifest.json": "9886c2d4c3c187d2ddc19c113f8642741329837c3f1e58870af748bc6dff1c3d",
+        "qwen3_8_27b_nvfp4.ninfer.conversion.json": "73a2cf5860bfd039f829223cc1bbcb12ea726e4e084280a530965e436cc0a393"
+      }
+    }
+  },
+  "serving": {
+    "model_id": "qwen3.8-27b-huihui-abliterated-cinference",
+    "host": "127.0.0.1",
+    "port": 8000,
+    "max_context": 262144,
+    "kv_dtype": "k8v4",
+    "max_concurrency": 1,
+    "pending_timeout_ms": 600000,
+    "prefill_chunk": 1024,
+    "spec": "mtp",
+    "draft_tokens": 10,
+    "lm_head_draft": true,
+    "default_max_tokens": 32768,
+    "preserve_thinking": true
+  }
+}
