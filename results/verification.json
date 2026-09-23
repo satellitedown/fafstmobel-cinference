@@ -119,6 +119,63 @@
       },
       "finish_reason": "stop",
       "answer": "**No.** If a bloop were a luppy, it would also have to be a razzie (since all bloops are razzies). But no razzies are luppies, so that's a contradiction. Therefore, no bloop can be a luppy."
+    },
+    {
+      "label": "installed-vision",
+      "http_status": 200,
+      "seconds": 0.2171562489999924,
+      "usage": {
+        "completion_tokens": 31,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 91,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 122
+      },
+      "finish_reason": "stop",
+      "answer": "The color on the left is **red**.  \nThe color on the right is **blue**.\n\nSo, in order: **Red, Blue**"
     }
-  ]
+  ],
+  "installed_runtime": {
+    "independent_build": true,
+    "build_steps": 667,
+    "cuda": "13.4.92",
+    "host_compiler": "GNU 16.2.1",
+    "model_files_verified": 13,
+    "missing_metadata_download_recovered": true,
+    "kv_capacity_tokens": 262144,
+    "startup_free_vram_mib": 734.6
+  },
+  "omp": {
+    "selector": "fafstmobel/fafstmobel-cinference",
+    "exit_code": 0,
+    "tool": "read",
+    "tool_succeeded": true,
+    "answer": "CINFERENCE-TOOL-ROUNDTRIP-6D29B4",
+    "protocol": "openai-completions",
+    "usage": {
+      "input": 38,
+      "output": 18,
+      "cacheRead": 1605,
+      "cacheWrite": 0,
+      "totalTokens": 1661,
+      "cost": {
+        "input": 0,
+        "output": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      }
+    }
+  },
+  "lifecycle": {
+    "foreground_ctrl_c": "exit 0; systemd unit inactive",
+    "free_vram_after_stop_mib": 31171,
+    "terminal_forwarding": "systemd-run --pty --pipe",
+    "restarted_ready": true,
+    "autostart": false
+  }
 }
