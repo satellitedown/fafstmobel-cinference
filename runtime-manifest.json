@@ -1,5 +1,5 @@
 {
-  "name": "Fast Long Context - Cinference",
+  "name": "fafstmobel - Cinference",
   "runtime": {
     "repo_id": "satellitedown/cinference",
     "revision": "b74044fb0a319cd2a737cb7108012e6344b96dac",
@@ -10,38 +10,45 @@
   },
   "models": {
     "target": {
-      "repo_id": "satellitedown/Huihui-Qwen3.8-27B-abliterated-NVFP4-NInfer-v3",
-      "revision": "12fe3b16d82541dad06288b0da629933efebb6cd",
-      "directory": "Huihui-Qwen3.8-27B-abliterated-NVFP4-NInfer-v3",
-      "filename": "qwen3_8_27b_huihui_abliterated_nvfp4.ninfer",
+      "repo_id": "satellitedown/fafstmobel",
+      "revision": "54202e174c5f05945fbb873d1c2d8384e2643bd3",
+      "directory": "fafstmobel",
+      "filename": "fafstmobel.ninfer",
       "format_version": 3,
-      "size_bytes": 21492938224,
+      "size_bytes": 23719715844,
       "files": {
-        "qwen3_8_27b_huihui_abliterated_nvfp4.ninfer": "3876a052290d48171350a299eac3bcdbfeeac69f58efd11747d7f9509f7b54ee",
-        "LICENSE": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
-        "NOTICE": "9b905665ed937f1521e4659eafc1af8743379fefe90f7cfe3a95a650351a0580",
-        "README.md": "ec16b736a2d446f2edd2bc243af98e6591573cfa6f5be6cfa0fd3dce87865cf2",
-        "provenance.json": "fecb87f68cc58844d8c82b975b754e26b8f446d50fe81ce0f99925b60570e8e9",
-        "SHA256SUMS": "3378d13f91fbaab5cb86e5ef12ac265433baf2fed866d7a74d53ebabdbe70e56",
-        "source/NOTICE": "1fc20d0b782c81159c05ef799d70e912a1941271bb74240ad3781ac1634ef9e4",
-        "source/artifact-manifest.json": "9886c2d4c3c187d2ddc19c113f8642741329837c3f1e58870af748bc6dff1c3d",
-        "source/qwen3_8_27b_nvfp4.ninfer.conversion.json": "73a2cf5860bfd039f829223cc1bbcb12ea726e4e084280a530965e436cc0a393"
+        "LICENSE-APACHE-2.0": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
+        "LICENSE.huihui": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
+        "LICENSE.ninfer": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+        "LICENSE.qwen": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
+        "LICENSE.swift": "915ffe920f90088d15986bb6f7fab02e08b9a167cfbde65b012741ad88010e4f",
+        "NOTICE": "7a96b51e63d274f82d54e684ae06e485da19fa0e18d36de634ac8e8ae9189344",
+        "PROVENANCE.md": "82011246b1b4e12d822d47557f27addc27fb34e4aedc0b32b28bbb7da381999e",
+        "README.md": "873a763cd3d023656c491e5c98d4eddb9eaa4992273100bcd4741fe7fe5c2b3e",
+        "SHA256SUMS": "4b455d3be5f2cba5ca99e3e9c307c3f6d9d8afc9bf3d611a3c4e936e71405c83",
+        "fafstmobel.contract.json": "0a6f8fd0f50be89e0921af42d98893f3d73899e1193c707e9b5d19efb545c6d4",
+        "fafstmobel.conversion.inputs": "124dd827453fb886efb13c5e195b70933a6eefc49876d5d5df091d8312b9b41f",
+        "fafstmobel.ninfer": "70752ce85422f9d716438f85e80e6b68c496197c41c2aed32b126f1c23ce7364",
+        "fafstmobel.ninfer.conversion.json": "08c6b42d97aa4f657e3ad223101a4f05de0baaf78f403345e9a32999da3d4c16"
       }
     }
   },
   "serving": {
-    "model_id": "qwen3.8-27b-huihui-abliterated-cinference",
+    "model_id": "fafstmobel-cinference",
     "host": "127.0.0.1",
-    "port": 8000,
+    "port": 8001,
     "max_context": 262144,
     "kv_dtype": "k8v4",
     "max_concurrency": 1,
     "pending_timeout_ms": 600000,
     "prefill_chunk": 1024,
-    "spec": "mtp",
-    "draft_tokens": 10,
+    "spec": "dflash2",
+    "draft_tokens": 15,
     "lm_head_draft": true,
     "default_max_tokens": 32768,
-    "preserve_thinking": true
+    "preserve_thinking": true,
+    "vision": true,
+    "host_state_slots": 2,
+    "host_kv_mib": 1024
   }
 }

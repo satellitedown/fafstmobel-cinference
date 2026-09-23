@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Download and verify the pinned Huihui NVFP4 v3 artifact."""
+"""Download and verify the pinned fafstmobel NInfer v3 model and metadata."""
 import argparse
 import fcntl
 import hashlib
@@ -67,7 +67,7 @@ def main():
             raise ValueError("The download lock must be a regular file.")
         print("Waiting for exclusive download access...", flush=True)
         fcntl.flock(lock, fcntl.LOCK_EX)
-        print(f"Huihui NVFP4: {model['repo_id']} @ {model['revision']}", flush=True)
+        print(f"fafstmobel: {model['repo_id']} @ {model['revision']}", flush=True)
         print("Verifying model file checksums...", flush=True)
         missing = []
         for name, digest in model["files"].items():

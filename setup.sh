@@ -5,7 +5,7 @@ ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 export PATH="$ROOT/.tools/bin:$PATH"
 
 if [[ "${1:-}" == --help || "${1:-}" == -h ]]; then
-  printf 'Usage: bash setup.sh\n\nChoose 1 to install Cinference and download Huihui Qwen3.8-27B NVFP4.\nChoose 2 to download or resume the model download.\nChoose 3 to start the server with MTP-10.\nServing requires Linux x86_64 and an RTX 5090 with working NVIDIA drivers.\nAllow about 21.5 GB for model files, plus software.\n'
+  printf 'Usage: bash setup.sh\n\nChoose 1 to install Cinference and download fafstmobel NVFP4/FP8.\nChoose 2 to download or resume the model download.\nChoose 3 to start the server with the manifest profile (bundled DFlash2).\nServing requires Linux x86_64 and an RTX 5090 with working NVIDIA drivers.\nAllow about 23.8 GB for model files, plus software and download working space.\n'
   exit 0
 fi
 if [[ $# -ne 0 || ! -t 0 ]]; then
@@ -154,19 +154,19 @@ install_everything() {
   ensure_uv || return 1
   printf '\n[1/2] Installing local tools and building the pinned Cinference runtime...\n'
   run_step bash "$ROOT/scripts/install.sh" || return 1
-  printf '\n[2/2] Downloading and verifying Huihui NVFP4...\n'
+  printf '\n[2/2] Downloading and verifying fafstmobel and its licenses...\n'
   run_step "$ROOT/.venv/bin/python" "$ROOT/scripts/download_models.py" || return 1
   printf '\nInstallation complete. Choose 3 to start the server.\n'
 }
 
 while true; do
-  printf '\nFast Long Context - Cinference\n'
-  printf 'Huihui Qwen3.8-27B / RTX 5090, K8V4 KV, MTP-10\n\n'
+  printf '\nfafstmobel - Cinference\n'
+  printf 'Swift + Huihui Qwen3.8-27B / RTX 5090, K8V4 KV, bundled DFlash2\n\n'
   printf '  1) Install everything (build + download)\n'
   printf '  2) Download / resume model\n'
   printf '  3) Start the server (Ctrl-C to stop)\n'
   printf '  0) Exit\n\n'
-  printf 'Space: ~21.5 GB model files, plus software.\n'
+  printf 'Space: ~23.8 GB model files, plus software and download working space.\n'
   if ! read -r -p "Choose an option: " choice; then
     printf '\n'
     exit 0

@@ -1,5 +1,13 @@
-Fast Long Context - Cinference
+fafstmobel - Cinference
+
+Installer recipe
+----------------
+Adapted from Fast Long Context - Cinference:
 https://github.com/satellitedown/fast-long-context-cinference
+The recipe has been changed to download fafstmobel and its complete published
+license/provenance bundle, use its own model ID and port, and expose its bundled
+DFlash2, vision, and host-cache serving profile. The original recipe's model
+performance claims and screenshot are not applicable to this derivative.
 
 This repository provides an Apache-2.0 installation recipe. It does not
 redistribute model weights. Its license does not replace the licenses of
@@ -16,49 +24,80 @@ Native executable names, API symbols and the .ninfer container name remain
 NInfer names. This recipe builds the pinned fork without applying local
 source patches. Retain its license and third-party notices.
 
-Model artifact
---------------
-Original NVFP4 artifact:
-Barding-Defense/Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer:
-https://huggingface.co/Barding-Defense/Qwen3.8-27B-huihui-abliterated-NVFP4-NInfer
-Original artifact revision: 228612d2a1f48c9e1b6f5e102f369c133c0f6eec
+Model artifact and transformation
+---------------------------------
+fafstmobel: https://huggingface.co/satellitedown/fafstmobel
+Revision: 54202e174c5f05945fbb873d1c2d8384e2643bd3
 
-The installed model is a ready-to-use NInfer v3 repackaging. Its repository,
-immutable revision and file checksums are recorded in runtime-manifest.json.
-The recipe downloads and verifies its LICENSE, NOTICE and provenance record.
-The source publisher's Apache-2.0 license and Copyright 2026 Alibaba Cloud
-notice are retained unchanged. Original publisher records are included in source/.
+The downloaded NInfer v3 artifact is a derivative of the upstream weights
+listed below. Its published transformation notice describes:
+  1. delta transplant: result = swift.float() + (huihui.float() - base.float()),
+     rounded once to bfloat16, applied only to language-model decoder layer
+     weights that differ between the base and Huihui checkpoints;
+  2. text quantization to NVFP4/FP8 with a local calibration pass;
+  3. conversion to NInfer v3, bundling the published DFlash2 draft as a
+     separate component alongside text, vision and MTP.
 
-Artifact derivation and additional credit
-----------------------------------------
-- Qwen / Alibaba Cloud: Qwen/Qwen3.8-27B, the upstream base model.
-- Huihui AI: huihui-ai/Huihui-Qwen3.8-27B-abliterated, revision
-  739e3c5b89849f6c238ce1e5b70008612ae42cdd, the abliterated derivative.
-- Barding-Defense: mixed NVFP4 / FP8 / BF16 quantization and publication
-  of the NInfer v2 artifact. The publisher reports no fine-tuning,
-  re-abliteration, or behavioral modification during quantization.
-- NInfer: container format and converter, publisher conversion revision
-  a140e7ae82a11ed2f370a4d8f2cc16268a3790b8. The publisher describes a
-  provenance-constant patch in its NOTICE and artifact manifest.
-- Unsloth: unsloth/Qwen3.8-27B-NVFP4 quantization configuration.
+No Swift retraining, new draft-model training, or re-fitting of a refusal
+direction was performed by that transformation. The installer only downloads
+and verifies the published artifact; it does not modify weights.
+
+Upstream inputs (from the published PROVENANCE.md)
+------------------------------------------------
+- UkisAI: ukisai/Swift-Qwen3.8-27b
+  https://huggingface.co/ukisai/Swift-Qwen3.8-27b
+  weights: 1b30aaaf753fe5c1cb51ada2ea0367a53445359c
+  legal records: 048328f4059015b63f860a453bf94834af0db683
+  Swift-Qwen3.8-27B, Copyright 2026 UkisAI.
+  UkisAI's upstream changes include LoRA fine-tuning merged into the base
+  weights, generation-config changes, and replacement model-card assets;
+  the downloaded NOTICE retains the original detailed change notice.
+- Qwen / Alibaba Cloud: Qwen/Qwen3.8-27B
+  https://huggingface.co/Qwen/Qwen3.8-27B
+  1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0
+  Copyright 2026 Alibaba Cloud; Apache License, Version 2.0.
+- Huihui AI: huihui-ai/Huihui-Qwen3.8-27B-abliterated
+  https://huggingface.co/huihui-ai/Huihui-Qwen3.8-27B-abliterated
+  739e3c5b89849f6c238ce1e5b70008612ae42cdd
+  The observed base-to-Huihui weight delta is transplanted, not retrained.
+- z-lab: z-lab/Qwen3.8-27B-DFlash2
+  https://huggingface.co/z-lab/Qwen3.8-27B-DFlash2
+  50307d4c4cde6860d4eee73e2547cd786fe8e8a4
+  Pretrained draft contribution, bundled by conversion.
+- Dragoy: Swift-Qwen3.8-27B-abliterated-NVFP4-NInfer
+  https://huggingface.co/Dragoy/Swift-Qwen3.8-27B-abliterated-NVFP4-NInfer
+  4c25aa201b412fe3850e7c0c216c42da935aba38
+  Quantization recipe file and qconfig only; not derivative model weights.
+- HuggingFaceH4/ultrachat_200k: calibration data
+  https://huggingface.co/datasets/HuggingFaceH4/ultrachat_200k
+  8049631c405ae6576f93f445c6b8166f76f5505a
+- NInfer converter/reference:
+  https://github.com/Neroued/ninfer
+  98dada0e03cb073fd07f905400b5904bc6e82759
 - llm-compressor / compressed-tensors contributors: quantization tooling.
-- HuggingFaceH4/ultrachat_200k: MIT-licensed calibration data. The publisher
-  reports using 32 samples at sequence length 2048; no dataset content is
-  reproduced in the artifact.
 - NVIDIA: CUDA and Blackwell hardware support; downloaded CUDA components
   retain their own license terms.
 
-Model publication changes
--------------------------
-The publisher's NInfer v2 container is converted to v3 once, before publication,
-using the pinned Cinference runtime's standard-library Python upgrader. Original
-tensor payload bytes are preserved and the maintained Qwen3.8 chat template is
-installed. The recipe downloads the resulting artifact directly.
+Model license boundaries
+------------------------
+Upstream contributions remain the property of their authors. The Swift
+contribution remains under the Swift Open License v1.0, shipped in the model
+bundle as LICENSE.swift, including its commercial-revenue condition. It is
+not unrestricted Apache-2.0. Commercial use by a Legal Entity exceeding the
+license's US$1 million Threshold is not licensed without a separate Swift
+Enterprise License; consult the complete license definitions and Section 5.
 
-The published provenance.json records input/output identity and checksums,
-conversion-tool provenance, and the statement of changes. The original
-Barding-Defense conversion report is retained separately under source/.
+Qwen, Huihui and DFlash2 contributions retain their Apache-2.0 terms.
+The download retains LICENSE-APACHE-2.0, LICENSE.qwen, LICENSE.huihui,
+LICENSE.swift, LICENSE.ninfer, NOTICE and PROVENANCE.md without alteration.
+The original Swift notice's reference to its LICENSE means LICENSE.swift
+in this published bundle. Naming this derivative does not transfer ownership
+of upstream weights or expand the rights granted by their authors.
 
-This is an unofficial community recipe, not an endorsement by or
-affiliation with Alibaba Cloud, Huihui AI, Barding-Defense, Unsloth,
-NVIDIA, or the NInfer project. Qwen is a trademark of Alibaba Cloud.
+The manifest pins checksums for all 13 published model files, including the
+model card, SHA256SUMS, contract, conversion-input record and conversion report.
+The recipe license is separate from these model and runtime licenses.
+
+This is an unofficial community recipe, not an endorsement by or affiliation
+with Alibaba Cloud, Huihui AI, UkisAI, z-lab, Dragoy, NVIDIA, or NInfer.
+Qwen is a trademark of Alibaba Cloud.

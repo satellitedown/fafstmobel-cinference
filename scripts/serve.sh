@@ -9,8 +9,8 @@ for argument in "$@"; do
     cat <<'HELP'
 Usage: bash scripts/serve.sh [additional native server arguments]
   MODEL_PATH     v3 .ninfer artifact (default: manifest's models/ location)
-  HOST / PORT    Bind address (default: 127.0.0.1 / 8000)
-Uses the pinned Huihui NVFP4 / Cinference MTP-10 profile from runtime-manifest.json.
+  HOST / PORT    Bind address (default: 127.0.0.1 / 8001)
+Uses the pinned fafstmobel / Cinference profile from runtime-manifest.json.
 Extra native server arguments follow the profile. Runs in the foreground.
 Stop with Ctrl-C. The API has no authentication; keep it on loopback.
 HELP
@@ -47,10 +47,11 @@ print(serving["port"])
 for key in (
     "model_id", "max_context", "kv_dtype", "max_concurrency", "pending_timeout_ms",
     "prefill_chunk", "spec", "draft_tokens", "default_max_tokens",
+    "host_state_slots", "host_kv_mib",
 ):
     print("--" + key.replace("_", "-"))
     print(serving[key])
-for key in ("lm_head_draft", "preserve_thinking"):
+for key in ("lm_head_draft", "preserve_thinking", "vision"):
     if serving[key]:
         print("--" + key.replace("_", "-"))
 PY

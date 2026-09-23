@@ -1,0 +1,124 @@
+{
+  "verified_at": "2026-09-23T01:13:54.777Z",
+  "runtime": {
+    "repo": "satellitedown/cinference",
+    "revision": "b74044fb0a319cd2a737cb7108012e6344b96dac"
+  },
+  "model": {
+    "repo": "satellitedown/fafstmobel",
+    "revision": "54202e174c5f05945fbb873d1c2d8384e2643bd3",
+    "sha256": "70752ce85422f9d716438f85e80e6b68c496197c41c2aed32b126f1c23ce7364"
+  },
+  "profile": {
+    "max_context": 262144,
+    "kv_dtype": "k8v4",
+    "spec": "dflash2",
+    "draft_tokens": 15,
+    "vision": true,
+    "host_state_slots": 2,
+    "host_kv_mib": 1024
+  },
+  "scope": "Capacity and integration smoke checks, not general model quality or throughput benchmarks.",
+  "checks": [
+    {
+      "label": "short-text",
+      "http_status": 200,
+      "seconds": 0.12521157,
+      "usage": {
+        "completion_tokens": 4,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 29,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 33
+      },
+      "finish_reason": "stop",
+      "answer": "323"
+    },
+    {
+      "label": "tool-call",
+      "http_status": 200,
+      "seconds": 0.19654997499999444,
+      "usage": {
+        "completion_tokens": 27,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 309,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 336
+      },
+      "finish_reason": "tool_calls",
+      "answer": null,
+      "tool_calls": [
+        {
+          "function": {
+            "arguments": "{\"item\":\"Q7\"}",
+            "name": "lookup_code"
+          },
+          "id": "call_7a5c893b57338ac9",
+          "type": "function"
+        }
+      ]
+    },
+    {
+      "label": "long-context-recall",
+      "http_status": 200,
+      "seconds": 114.96449168599999,
+      "usage": {
+        "completion_tokens": 8,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 259843,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 259851
+      },
+      "finish_reason": "stop",
+      "answer": "MAPLE-8427"
+    },
+    {
+      "label": "vision",
+      "http_status": 200,
+      "seconds": 0.10479851399999461,
+      "usage": {
+        "completion_tokens": 4,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 94,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 98
+      },
+      "finish_reason": "stop",
+      "answer": " red, blue"
+    },
+    {
+      "label": "reasoning-low",
+      "http_status": 200,
+      "seconds": 0.6738786240000045,
+      "usage": {
+        "completion_tokens": 185,
+        "completion_tokens_details": {
+          "reasoning_tokens": 125
+        },
+        "prompt_tokens": 69,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 254
+      },
+      "finish_reason": "stop",
+      "answer": "**No.** If a bloop were a luppy, it would also have to be a razzie (since all bloops are razzies). But no razzies are luppies, so that's a contradiction. Therefore, no bloop can be a luppy."
+    }
+  ]
+}
