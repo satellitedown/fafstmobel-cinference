@@ -91,13 +91,13 @@ Use `--thinking off` for non-thinking requests. The explicit Qwen template setti
 
 ## Verification
 
-[results/verification.json](results/verification.json) records the runtime/model pins, active profile, and observed smoke-check responses. These checks do not substitute for evaluating model quality on your own workloads.
+[results/verification.json](results/verification.json) records the runtime/model pins, active profile, and observed smoke-check responses. These checks do not substitute for evaluating model quality on your own workloads. The record was captured with the previous runtime pin `b74044f`; the current pin changes only DFlash2 verification kernels and documentation, and was checked with Cinference's kernel and speculative-decoding tests rather than a new installer smoke run.
 
 ## Immutable downloads
 
 [runtime-manifest.json](runtime-manifest.json) pins:
 
-- runtime: `satellitedown/cinference` @ `b74044fb0a319cd2a737cb7108012e6344b96dac`;
+- runtime: `satellitedown/cinference` @ `f6a654c818a567ea574138f28d9d016c1f1348f4`, which adds faster DFlash2 verification kernels (about 11–16% shorter rounds and 12–19% more tokens/s at 8K–131K; see Cinference's [measurements](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-kernels.json));
 - model: `satellitedown/fafstmobel` @ `54202e174c5f05945fbb873d1c2d8384e2643bd3`;
 - all **13 published model files**, including licenses, notices, provenance, conversion records, and SHA-256 digests. The Hub-generated `.gitattributes` is not needed.
 
