@@ -97,7 +97,7 @@ Use `--thinking off` for non-thinking requests. The explicit Qwen template setti
 
 [runtime-manifest.json](runtime-manifest.json) pins:
 
-- runtime: `satellitedown/cinference` @ `0f97c2febad844c54afd7278d836465abaa4e580`, which adds faster DFlash2 verification kernels (about 13–17% shorter rounds and 15–25% more tokens/s at 8K–131K; see Cinference's [measurements](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-kernels-2.json));
+- runtime: `satellitedown/cinference` @ `edfa9d0819f9a84167dbb6bb322ac8d1d9f92344`, which adds faster DFlash2 verification kernels (about 17–27% shorter rounds and 21–37% more tokens/s at 8K–131K) and faster long-prompt prefill (about 22% more prompt tokens/s at 131K); see Cinference's [measurements](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-kernels-5.json);
 - model: `satellitedown/fafstmobel` @ `54202e174c5f05945fbb873d1c2d8384e2643bd3`;
 - all **13 published model files**, including licenses, notices, provenance, conversion records, and SHA-256 digests. The Hub-generated `.gitattributes` is not needed.
 

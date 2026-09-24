@@ -2,7 +2,7 @@
   "name": "fafstmobel - Cinference",
   "runtime": {
     "repo_id": "satellitedown/cinference",
-    "revision": "0f97c2febad844c54afd7278d836465abaa4e580",
+    "revision": "edfa9d0819f9a84167dbb6bb322ac8d1d9f92344",
     "cuda_architectures": "120a",
     "cuda_version": "13.4.92",
     "build_type": "Release",
