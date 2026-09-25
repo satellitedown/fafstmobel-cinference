@@ -51,7 +51,7 @@ for key in (
 ):
     print("--" + key.replace("_", "-"))
     print(serving[key])
-for key in ("lm_head_draft", "preserve_thinking", "vision"):
+for key in ("lm_head_draft", "verify_tree", "preserve_thinking", "vision"):
     if serving[key]:
         print("--" + key.replace("_", "-"))
 PY

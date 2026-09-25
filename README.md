@@ -29,7 +29,7 @@ Use the OpenAI-compatible API at **`http://127.0.0.1:8001/v1`**, model **`fafstm
 The profile in [runtime-manifest.json](runtime-manifest.json) uses:
 
 - context **262,144 tokens**, default maximum output **32,768 tokens**, within remaining context;
-- **K8V4** KV cache, **DFlash2** speculation with 15 draft tokens and the bundled proposal head;
+- **K8V4** KV cache, **DFlash2** speculation with 15 draft tokens, the bundled proposal head, and verify trees with prompt lookup;
 - vision enabled and thinking preserved;
 - two host-state slots and **1,024 MiB** of host KV storage.
 
@@ -91,13 +91,13 @@ Use `--thinking off` for non-thinking requests. The explicit Qwen template setti
 
 ## Verification
 
-[results/verification.json](results/verification.json) records the runtime/model pins, active profile, and observed smoke-check responses. These checks do not substitute for evaluating model quality on your own workloads. The record was captured with the previous runtime pin `b74044f`; the current pin changes only DFlash2 verification kernels and documentation, and was checked with Cinference's kernel and speculative-decoding tests rather than a new installer smoke run.
+[results/verification.json](results/verification.json) records the runtime/model pins, active profile, and observed smoke-check responses. These checks do not substitute for evaluating model quality on your own workloads. The record was captured with the previous runtime pin `b74044f`; the current pin changes DFlash2 verification (faster kernels, and verify trees that this profile enables) and documentation, and was checked with Cinference's kernel and speculative-decoding tests rather than a new installer smoke run.
 
 ## Immutable downloads
 
 [runtime-manifest.json](runtime-manifest.json) pins:
 
-- runtime: `satellitedown/cinference` @ `edfa9d0819f9a84167dbb6bb322ac8d1d9f92344`, which adds faster DFlash2 verification kernels (about 17–27% shorter rounds and 21–37% more tokens/s at 8K–131K) and faster long-prompt prefill (about 22% more prompt tokens/s at 131K); see Cinference's [measurements](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-kernels-5.json);
+- runtime: `satellitedown/cinference` @ `e3f8630186258301e03323ca29f4af5d3fc7055d`, which adds faster DFlash2 verification kernels (about 17–27% shorter rounds and 21–37% more tokens/s at 8K–131K), faster long-prompt prefill (about 22% more prompt tokens/s at 131K), and DFlash2 verify trees with prompt lookup, which this profile enables (`verify_tree`; about 13–20% more tokens/s on coding chat and up to 52% more on copy-heavy file edits); see Cinference's [kernel](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-kernels-5.json) and [verify-tree](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-verify-trees.json) measurements;
 - model: `satellitedown/fafstmobel` @ `54202e174c5f05945fbb873d1c2d8384e2643bd3`;
 - all **13 published model files**, including licenses, notices, provenance, conversion records, and SHA-256 digests. The Hub-generated `.gitattributes` is not needed.
 
