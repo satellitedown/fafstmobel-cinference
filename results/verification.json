@@ -1,13 +1,13 @@
 {
-  "verified_at": "2026-09-23T01:13:54.777Z",
+  "verified_at": "2026-09-28T23:07:30.000Z",
   "runtime": {
     "repo": "satellitedown/cinference",
-    "revision": "b74044fb0a319cd2a737cb7108012e6344b96dac"
+    "revision": "1d07410740f5b91737587bfd57ea65abc29a4c75"
   },
   "model": {
     "repo": "satellitedown/fafstmobel",
-    "revision": "54202e174c5f05945fbb873d1c2d8384e2643bd3",
-    "sha256": "70752ce85422f9d716438f85e80e6b68c496197c41c2aed32b126f1c23ce7364"
+    "revision": "879903480d257762989d05785ee7d8935074703f",
+    "sha256": "828e5dffc1e023c2032e901cf060197d5c282cd2d9f4566297aad4b8f155a16b"
   },
   "profile": {
     "max_context": 262144,
@@ -23,7 +23,7 @@
     {
       "label": "short-text",
       "http_status": 200,
-      "seconds": 0.12521157,
+      "seconds": 0.117,
       "usage": {
         "completion_tokens": 4,
         "completion_tokens_details": {
@@ -41,17 +41,17 @@
     {
       "label": "tool-call",
       "http_status": 200,
-      "seconds": 0.19654997499999444,
+      "seconds": 0.203,
       "usage": {
         "completion_tokens": 27,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 309,
+        "prompt_tokens": 292,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 336
+        "total_tokens": 319
       },
       "finish_reason": "tool_calls",
       "answer": null,
@@ -61,7 +61,7 @@
             "arguments": "{\"item\":\"Q7\"}",
             "name": "lookup_code"
           },
-          "id": "call_7a5c893b57338ac9",
+          "id": "call_22f35b1324ad3a92",
           "type": "function"
         }
       ]
@@ -69,17 +69,17 @@
     {
       "label": "long-context-recall",
       "http_status": 200,
-      "seconds": 114.96449168599999,
+      "seconds": 97.355,
       "usage": {
         "completion_tokens": 8,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 259843,
+        "prompt_tokens": 259748,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 259851
+        "total_tokens": 259756
       },
       "finish_reason": "stop",
       "answer": "MAPLE-8427"
@@ -87,69 +87,52 @@
     {
       "label": "vision",
       "http_status": 200,
-      "seconds": 0.10479851399999461,
+      "seconds": 0.109,
       "usage": {
         "completion_tokens": 4,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 94,
+        "prompt_tokens": 96,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 98
+        "total_tokens": 100
       },
       "finish_reason": "stop",
-      "answer": " red, blue"
+      "answer": "red, blue"
     },
     {
       "label": "reasoning-low",
       "http_status": 200,
-      "seconds": 0.6738786240000045,
+      "seconds": 0.538,
       "usage": {
-        "completion_tokens": 185,
+        "completion_tokens": 164,
         "completion_tokens_details": {
-          "reasoning_tokens": 125
+          "reasoning_tokens": 120
         },
-        "prompt_tokens": 69,
+        "prompt_tokens": 75,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 254
+        "total_tokens": 239
       },
       "finish_reason": "stop",
-      "answer": "**No.** If a bloop were a luppy, it would also have to be a razzie (since all bloops are razzies). But no razzies are luppies, so that's a contradiction. Therefore, no bloop can be a luppy."
-    },
-    {
-      "label": "installed-vision",
-      "http_status": 200,
-      "seconds": 0.2171562489999924,
-      "usage": {
-        "completion_tokens": 31,
-        "completion_tokens_details": {
-          "reasoning_tokens": 0
-        },
-        "prompt_tokens": 91,
-        "prompt_tokens_details": {
-          "cached_tokens": 0
-        },
-        "total_tokens": 122
-      },
-      "finish_reason": "stop",
-      "answer": "The color on the left is **red**.  \nThe color on the right is **blue**.\n\nSo, in order: **Red, Blue**"
+      "answer": "No, because if a bloop were a luppy it would also be a razzie (since all bloops are razzies), contradicting the fact that no razzies are luppies."
     }
   ],
   "installed_runtime": {
     "independent_build": true,
-    "build_steps": 667,
+    "fresh_clone": true,
+    "build_steps": 682,
     "cuda": "13.4.92",
     "host_compiler": "GNU 16.2.1",
     "model_files_verified": 13,
-    "missing_metadata_download_recovered": true,
     "kv_capacity_tokens": 262144,
-    "startup_free_vram_mib": 734.6
+    "startup_free_vram_mib": 1001.8
   },
   "omp": {
+    "carried_from": "runtime b74044f, model 54202e1; scripts/serve.sh and the OMP model entry are unchanged",
     "selector": "fafstmobel/fafstmobel-cinference",
     "exit_code": 0,
     "tool": "read",
@@ -172,6 +155,7 @@
     }
   },
   "lifecycle": {
+    "carried_from": "runtime b74044f, model 54202e1; scripts/serve.sh and the OMP model entry are unchanged",
     "foreground_ctrl_c": "exit 0; systemd unit inactive",
     "free_vram_after_stop_mib": 31171,
     "terminal_forwarding": "systemd-run --pty --pipe",

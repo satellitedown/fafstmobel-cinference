@@ -14,11 +14,13 @@ bash setup.sh
 
 The same three-option workflow handles installation and serving:
 
-1. **Install everything (build + download):** check prerequisites, offer to install missing system build packages with permission, install local tools, build the pinned runtime, and download the model. Allow **~23.8 GB for model files**, plus software, build products, and download working space.
+1. **Install everything (build + download):** check prerequisites, offer to install missing system build packages with permission, install local tools, build the pinned runtime, and download the model. Allow **~22.9 GB for model files**, plus software, build products, and download working space.
 2. **Download / resume model:** download the pinned artifact and metadata without compiling the runtime or installing CUDA. Interrupted downloads retain their local cache and can be resumed. Existing files are checksum-verified rather than silently replaced.
 3. **Start the server:** run in the foreground. Leave the terminal open while using the API; **Ctrl+C** stops it. Choose **0** to exit the menu.
 
 An interrupted install can be continued with option 1; an interrupted download with option 2. Existing modified runtime source, unexpected CUDA files, or mismatched model files are reported instead of reset or deleted. Review the error and move conflicting files aside yourself before retrying.
+
+Upgrading from an earlier pinned model: its files no longer match the new checksums. Move `models/fafstmobel/` aside (or delete it), then choose option 1 to rebuild the runtime at the new pin and download the new files.
 
 By default, everything lives inside this checkout: `.tools/`, `.venv/`, `.cuda-toolkit/`, `runtime/ninfer/`, and `models/fafstmobel/`. The isolated CUDA SDK is pinned to **13.4.92**, with Release builds limited to two jobs; it does not depend on a separate model-building project or system CUDA toolkit. System compilers, NVIDIA driver libraries, FFmpeg development libraries, and libcurl >= 7.85 remain prerequisites.
 
@@ -33,9 +35,9 @@ The profile in [runtime-manifest.json](runtime-manifest.json) uses:
 - vision enabled and thinking preserved;
 - two host-state slots and **1,024 MiB** of host KV storage.
 
-Verified on an RTX 5090: a **259,843-token prompt** recalled `MAPLE-8427` from its beginning; ordinary text, function-tool calls, and a red/blue image also completed successfully. This is a capacity and integration smoke check, not a quality or throughput benchmark.
+Verified on an RTX 5090 from a fresh clone of this installer: a **259,748-token prompt** recalled `MAPLE-8427` from its beginning; ordinary text, function-tool calls, low-effort reasoning, and a red/blue image also completed successfully. This is a capacity and integration smoke check, not a quality or throughput benchmark.
 
-The measured startup left approximately **700 MiB of VRAM free** with this desktop running. Other GPU workloads can prevent startup; stop them yourself before serving. To reserve more headroom, explicitly reduce context, for example `bash scripts/serve.sh --max-context 131072`. Configure the client to the same smaller limit. The server does not silently disable vision or speculation to fit.
+The measured startup left approximately **1,000 MiB of VRAM free** with this desktop running. Other GPU workloads can prevent startup; stop them yourself before serving. To reserve more headroom, explicitly reduce context, for example `bash scripts/serve.sh --max-context 131072`. Configure the client to the same smaller limit. The server does not silently disable vision or speculation to fit.
 
 For direct use after installation:
 
@@ -97,11 +99,11 @@ Use `--thinking off` for non-thinking requests. The explicit Qwen template setti
 
 [runtime-manifest.json](runtime-manifest.json) pins:
 
-- runtime: `satellitedown/cinference` @ `e3f8630186258301e03323ca29f4af5d3fc7055d`, which adds faster DFlash2 verification kernels (about 17–27% shorter rounds and 21–37% more tokens/s at 8K–131K), faster long-prompt prefill (about 22% more prompt tokens/s at 131K), and DFlash2 verify trees with prompt lookup, which this profile enables (`verify_tree`; about 13–20% more tokens/s on coding chat and up to 52% more on copy-heavy file edits); see Cinference's [kernel](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-kernels-5.json) and [verify-tree](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-verify-trees.json) measurements;
-- model: `satellitedown/fafstmobel` @ `54202e174c5f05945fbb873d1c2d8384e2643bd3`;
+- runtime: `satellitedown/cinference` @ `1d07410740f5b91737587bfd57ea65abc29a4c75`, which adds faster DFlash2 verification kernels (about 17–27% shorter rounds and 21–37% more tokens/s at 8K–131K), faster long-prompt prefill (about 22% more prompt tokens/s at 131K), DFlash2 verify trees with prompt lookup, which this profile enables (`verify_tree`; about 13–20% more tokens/s on coding chat and up to 52% more on copy-heavy file edits), and the kernels for this model's Q4 drafter (about 2% shorter rounds); see Cinference's [kernel](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-kernels-5.json), [verify-tree](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-verify-trees.json) and [Q4 drafter](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-q4-drafter.json) measurements;
+- model: `satellitedown/fafstmobel` @ `879903480d257762989d05785ee7d8935074703f`, which stores the DFlash2 drafter's projections as Q4; the main model is byte-identical to the previous revision `54202e174c5f05945fbb873d1c2d8384e2643bd3`;
 - all **13 published model files**, including licenses, notices, provenance, conversion records, and SHA-256 digests. The Hub-generated `.gitattributes` is not needed.
 
-The model artifact is `models/fafstmobel/fafstmobel.ninfer`, **23,719,715,844 bytes**, SHA-256 `70752ce85422f9d716438f85e80e6b68c496197c41c2aed32b126f1c23ce7364`. Download verification also checks the artifact size and NInfer v3 header. Published conversion records retain historical build information; no historical build path is used by this installer.
+The model artifact is `models/fafstmobel/fafstmobel.ninfer`, **22,884,131,844 bytes**, SHA-256 `828e5dffc1e023c2032e901cf060197d5c282cd2d9f4566297aad4b8f155a16b`. Download verification also checks the artifact size and NInfer v3 header. Published conversion records retain historical build information; no historical build path is used by this installer.
 
 ## Model lineage — no training
 

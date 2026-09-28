@@ -23,7 +23,7 @@ def verify_file(path, expected):
     if actual != expected:
         raise ValueError(
             f"SHA-256 mismatch: {path}\nExpected {expected}; got {actual}.\n"
-            "Move the damaged or unrelated file aside and retry; it was not overwritten."
+            "Move the damaged, outdated, or unrelated file aside and retry; it was not overwritten."
         )
 
 

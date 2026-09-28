@@ -2,7 +2,7 @@
   "name": "fafstmobel - Cinference",
   "runtime": {
     "repo_id": "satellitedown/cinference",
-    "revision": "e3f8630186258301e03323ca29f4af5d3fc7055d",
+    "revision": "1d07410740f5b91737587bfd57ea65abc29a4c75",
     "cuda_architectures": "120a",
     "cuda_version": "13.4.92",
     "build_type": "Release",
@@ -11,25 +11,25 @@
   "models": {
     "target": {
       "repo_id": "satellitedown/fafstmobel",
-      "revision": "54202e174c5f05945fbb873d1c2d8384e2643bd3",
+      "revision": "879903480d257762989d05785ee7d8935074703f",
       "directory": "fafstmobel",
       "filename": "fafstmobel.ninfer",
       "format_version": 3,
-      "size_bytes": 23719715844,
+      "size_bytes": 22884131844,
       "files": {
         "LICENSE-APACHE-2.0": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
         "LICENSE.huihui": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
         "LICENSE.ninfer": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
         "LICENSE.qwen": "bbedc3fda3305820b977265f01b8619d87570a6739de3a5582c3464840f1e57a",
         "LICENSE.swift": "915ffe920f90088d15986bb6f7fab02e08b9a167cfbde65b012741ad88010e4f",
-        "NOTICE": "7a96b51e63d274f82d54e684ae06e485da19fa0e18d36de634ac8e8ae9189344",
-        "PROVENANCE.md": "82011246b1b4e12d822d47557f27addc27fb34e4aedc0b32b28bbb7da381999e",
-        "README.md": "873a763cd3d023656c491e5c98d4eddb9eaa4992273100bcd4741fe7fe5c2b3e",
-        "SHA256SUMS": "4b455d3be5f2cba5ca99e3e9c307c3f6d9d8afc9bf3d611a3c4e936e71405c83",
-        "fafstmobel.contract.json": "0a6f8fd0f50be89e0921af42d98893f3d73899e1193c707e9b5d19efb545c6d4",
-        "fafstmobel.conversion.inputs": "124dd827453fb886efb13c5e195b70933a6eefc49876d5d5df091d8312b9b41f",
-        "fafstmobel.ninfer": "70752ce85422f9d716438f85e80e6b68c496197c41c2aed32b126f1c23ce7364",
-        "fafstmobel.ninfer.conversion.json": "08c6b42d97aa4f657e3ad223101a4f05de0baaf78f403345e9a32999da3d4c16"
+        "NOTICE": "6f161e331c6b14aa2817afc770adc74a063e6de191e402b33b0a8890679d9e75",
+        "PROVENANCE.md": "f22292bad8cd405abae18628414060976c3b8d6913704cb2a76718d8d3c38c9a",
+        "README.md": "a17f1ecfa56848510570a805c49b7ccb782a53877b5dfb93397792eeb00743f0",
+        "SHA256SUMS": "1b6a92f3801e041536514e9201330f7b472f48691f2bd8fd8b5218c7dc40b377",
+        "fafstmobel.contract.json": "34e9eb1218f171e543ae079b99ff0f0a431aa8d63391933578d6a8b942bc4bd7",
+        "fafstmobel.conversion.inputs": "05292af994a7432a68d040c58f506398af61adc3d4637fd128b43a6127efed02",
+        "fafstmobel.ninfer": "828e5dffc1e023c2032e901cf060197d5c282cd2d9f4566297aad4b8f155a16b",
+        "fafstmobel.ninfer.conversion.json": "cdb210bac3ce1097b6501c2fd05ae0acb47aab4a218a015b5a59ba12ad656b94"
       }
     }
   },
