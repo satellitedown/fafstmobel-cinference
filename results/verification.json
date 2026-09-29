@@ -1,8 +1,8 @@
 {
-  "verified_at": "2026-09-28T23:07:30.000Z",
+  "verified_at": "2026-09-29T13:31:00.000Z",
   "runtime": {
     "repo": "satellitedown/cinference",
-    "revision": "1d07410740f5b91737587bfd57ea65abc29a4c75"
+    "revision": "bf3bd228bfab7af1894d1e92372650dffdb9cad7"
   },
   "model": {
     "repo": "satellitedown/fafstmobel",
@@ -23,17 +23,17 @@
     {
       "label": "short-text",
       "http_status": 200,
-      "seconds": 0.117,
+      "seconds": 0.109,
       "usage": {
         "completion_tokens": 4,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 29,
+        "prompt_tokens": 28,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 33
+        "total_tokens": 32
       },
       "finish_reason": "stop",
       "answer": "323"
@@ -41,17 +41,17 @@
     {
       "label": "tool-call",
       "http_status": 200,
-      "seconds": 0.203,
+      "seconds": 0.172,
       "usage": {
         "completion_tokens": 27,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 292,
+        "prompt_tokens": 291,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 319
+        "total_tokens": 318
       },
       "finish_reason": "tool_calls",
       "answer": null,
@@ -61,7 +61,7 @@
             "arguments": "{\"item\":\"Q7\"}",
             "name": "lookup_code"
           },
-          "id": "call_22f35b1324ad3a92",
+          "id": "call_f4bb9f20242a26e2",
           "type": "function"
         }
       ]
@@ -69,17 +69,17 @@
     {
       "label": "long-context-recall",
       "http_status": 200,
-      "seconds": 97.355,
+      "seconds": 90.103,
       "usage": {
         "completion_tokens": 8,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 259748,
+        "prompt_tokens": 259749,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 259756
+        "total_tokens": 259757
       },
       "finish_reason": "stop",
       "answer": "MAPLE-8427"
@@ -87,17 +87,17 @@
     {
       "label": "vision",
       "http_status": 200,
-      "seconds": 0.109,
+      "seconds": 0.094,
       "usage": {
         "completion_tokens": 4,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 96,
+        "prompt_tokens": 102,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 100
+        "total_tokens": 106
       },
       "finish_reason": "stop",
       "answer": "red, blue"
@@ -105,31 +105,29 @@
     {
       "label": "reasoning-low",
       "http_status": 200,
-      "seconds": 0.538,
+      "seconds": 0.313,
       "usage": {
-        "completion_tokens": 164,
+        "completion_tokens": 113,
         "completion_tokens_details": {
-          "reasoning_tokens": 120
+          "reasoning_tokens": 83
         },
-        "prompt_tokens": 75,
+        "prompt_tokens": 70,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 239
+        "total_tokens": 183
       },
       "finish_reason": "stop",
-      "answer": "No, because if a bloop were a luppy it would also be a razzie (since all bloops are razzies), contradicting the fact that no razzies are luppies."
+      "answer": "No, a bloop cannot be a luppy, because all bloops are razzies and no razzies are luppies."
     }
   ],
   "installed_runtime": {
-    "independent_build": true,
-    "fresh_clone": true,
-    "build_steps": 682,
-    "cuda": "13.4.92",
-    "host_compiler": "GNU 16.2.1",
-    "model_files_verified": 13,
+    "independent_build": false,
+    "fresh_clone": false,
+    "build": "local Release build of the pinned commit (CUDA 13.4, sm_120a) serving the manifest profile; the previous pin 1d07410 was verified from a fresh installer clone",
+    "model_file": "the pinned fafstmobel.ninfer, unchanged since the previous record",
     "kv_capacity_tokens": 262144,
-    "startup_free_vram_mib": 1001.8
+    "startup_free_vram_mib": 1132
   },
   "omp": {
     "carried_from": "runtime b74044f, model 54202e1; scripts/serve.sh and the OMP model entry are unchanged",

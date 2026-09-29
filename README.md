@@ -35,9 +35,9 @@ The profile in [runtime-manifest.json](runtime-manifest.json) uses:
 - vision enabled and thinking preserved;
 - two host-state slots and **1,024 MiB** of host KV storage.
 
-Verified on an RTX 5090 from a fresh clone of this installer: a **259,748-token prompt** recalled `MAPLE-8427` from its beginning; ordinary text, function-tool calls, low-effort reasoning, and a red/blue image also completed successfully. This is a capacity and integration smoke check, not a quality or throughput benchmark.
+Verified on an RTX 5090 with this profile: a **259,749-token prompt** recalled `MAPLE-8427` from its beginning; ordinary text, function-tool calls, low-effort reasoning, and a red/blue image also completed successfully. This is a capacity and integration smoke check, not a quality or throughput benchmark.
 
-The measured startup left approximately **1,000 MiB of VRAM free** with this desktop running. Other GPU workloads can prevent startup; stop them yourself before serving. To reserve more headroom, explicitly reduce context, for example `bash scripts/serve.sh --max-context 131072`. Configure the client to the same smaller limit. The server does not silently disable vision or speculation to fit.
+The measured startup left approximately **1,100 MiB of VRAM free** with this desktop running. Other GPU workloads can prevent startup; stop them yourself before serving. To reserve more headroom, explicitly reduce context, for example `bash scripts/serve.sh --max-context 131072`. Configure the client to the same smaller limit. The server does not silently disable vision or speculation to fit.
 
 For direct use after installation:
 
@@ -93,13 +93,13 @@ Use `--thinking off` for non-thinking requests. The explicit Qwen template setti
 
 ## Verification
 
-[results/verification.json](results/verification.json) records the runtime/model pins, active profile, and observed smoke-check responses. These checks do not substitute for evaluating model quality on your own workloads. The record was captured with the previous runtime pin `b74044f`; the current pin changes DFlash2 verification (faster kernels, and verify trees that this profile enables) and documentation, and was checked with Cinference's kernel and speculative-decoding tests rather than a new installer smoke run.
+[results/verification.json](results/verification.json) records the runtime/model pins, active profile, and observed smoke-check responses. These checks do not substitute for evaluating model quality on your own workloads. The smoke checks were captured with the current runtime pin, built locally from the pinned commit and serving this profile; the previous pin `1d07410` passed them from a fresh clone of this installer. The OMP round trip and the service lifecycle checks are carried from runtime `b74044f`, since `scripts/serve.sh` and the OMP model entry are unchanged.
 
 ## Immutable downloads
 
 [runtime-manifest.json](runtime-manifest.json) pins:
 
-- runtime: `satellitedown/cinference` @ `1d07410740f5b91737587bfd57ea65abc29a4c75`, which adds faster DFlash2 verification kernels (about 17–27% shorter rounds and 21–37% more tokens/s at 8K–131K), faster long-prompt prefill (about 22% more prompt tokens/s at 131K), DFlash2 verify trees with prompt lookup, which this profile enables (`verify_tree`; about 13–20% more tokens/s on coding chat and up to 52% more on copy-heavy file edits), and the kernels for this model's Q4 drafter (about 2% shorter rounds); see Cinference's [kernel](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-kernels-5.json), [verify-tree](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-verify-trees.json) and [Q4 drafter](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-q4-drafter.json) measurements;
+- runtime: `satellitedown/cinference` @ `bf3bd228bfab7af1894d1e92372650dffdb9cad7`, which adds faster DFlash2 verification kernels (about 17–27% shorter rounds and 21–37% more tokens/s at 8K–131K), faster long-prompt prefill (about 22% more prompt tokens/s at 131K), DFlash2 verify trees with prompt lookup, which this profile enables (`verify_tree`; about 13–20% more tokens/s on coding chat and up to 52% more on copy-heavy file edits), the kernels for this model's Q4 drafter (about 2% shorter rounds), and lookup rounds with a shorter round (about 1% shorter rounds on every workload; when the output copies earlier text verbatim, near-certain prompt-lookup chains are verified without drafting, which raises tokens/s by 18–22% on Cinference's repetitive benchmark corpus but leaves thinking chat unchanged at about +1%); see Cinference's [kernel](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-kernels-5.json), [verify-tree](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-dflash2-verify-trees.json), [Q4 drafter](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-q4-drafter.json) and [lookup-round](https://github.com/satellitedown/cinference/blob/main/results/rtx5090-fafstmobel-lookup-rounds.json) measurements;
 - model: `satellitedown/fafstmobel` @ `879903480d257762989d05785ee7d8935074703f`, which stores the DFlash2 drafter's projections as Q4; the main model is byte-identical to the previous revision `54202e174c5f05945fbb873d1c2d8384e2643bd3`;
 - all **13 published model files**, including licenses, notices, provenance, conversion records, and SHA-256 digests. The Hub-generated `.gitattributes` is not needed.
 
