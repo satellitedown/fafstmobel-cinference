@@ -1,8 +1,8 @@
 {
-  "verified_at": "2026-09-29T13:31:00.000Z",
+  "verified_at": "2026-09-30T08:19:00.000Z",
   "runtime": {
     "repo": "satellitedown/cinference",
-    "revision": "bf3bd228bfab7af1894d1e92372650dffdb9cad7"
+    "revision": "383e5dbbaf927b562b11d7d48dbe4d10c1bf39bd"
   },
   "model": {
     "repo": "satellitedown/fafstmobel",
@@ -23,7 +23,7 @@
     {
       "label": "short-text",
       "http_status": 200,
-      "seconds": 0.109,
+      "seconds": 0.104,
       "usage": {
         "completion_tokens": 4,
         "completion_tokens_details": {
@@ -61,7 +61,7 @@
             "arguments": "{\"item\":\"Q7\"}",
             "name": "lookup_code"
           },
-          "id": "call_f4bb9f20242a26e2",
+          "id": "call_2e398d4f6101901c",
           "type": "function"
         }
       ]
@@ -69,7 +69,7 @@
     {
       "label": "long-context-recall",
       "http_status": 200,
-      "seconds": 90.103,
+      "seconds": 89.58,
       "usage": {
         "completion_tokens": 8,
         "completion_tokens_details": {
@@ -87,7 +87,7 @@
     {
       "label": "vision",
       "http_status": 200,
-      "seconds": 0.094,
+      "seconds": 0.096,
       "usage": {
         "completion_tokens": 4,
         "completion_tokens_details": {
@@ -105,29 +105,29 @@
     {
       "label": "reasoning-low",
       "http_status": 200,
-      "seconds": 0.313,
+      "seconds": 0.328,
       "usage": {
-        "completion_tokens": 113,
+        "completion_tokens": 111,
         "completion_tokens_details": {
-          "reasoning_tokens": 83
+          "reasoning_tokens": 81
         },
         "prompt_tokens": 70,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 183
+        "total_tokens": 181
       },
       "finish_reason": "stop",
-      "answer": "No, a bloop cannot be a luppy, because all bloops are razzies and no razzies are luppies."
+      "answer": "No, a bloop cannot be a luppy, since all bloops are razzies and no razzies are luppies."
     }
   ],
   "installed_runtime": {
     "independent_build": false,
     "fresh_clone": false,
-    "build": "local Release build of the pinned commit (CUDA 13.4, sm_120a) serving the manifest profile; the previous pin 1d07410 was verified from a fresh installer clone",
+    "build": "local Release build of the pinned commit (CUDA 13.4, sm_120a) with the installer's isolated toolkit, serving the manifest profile; the previous pin bf3bd22 was verified the same way and 1d07410 from a fresh installer clone",
     "model_file": "the pinned fafstmobel.ninfer, unchanged since the previous record",
     "kv_capacity_tokens": 262144,
-    "startup_free_vram_mib": 1132
+    "startup_free_vram_mib": 1219
   },
   "omp": {
     "carried_from": "runtime b74044f, model 54202e1; scripts/serve.sh and the OMP model entry are unchanged",
