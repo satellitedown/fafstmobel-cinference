@@ -1,14 +1,29 @@
 #!/usr/bin/env bash
-# Install, download, or start the foreground server.
+# Install, update, download, or start the foreground server.
 set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 export PATH="$ROOT/.tools/bin:$PATH"
 
 if [[ "${1:-}" == --help || "${1:-}" == -h ]]; then
-  printf 'Usage: bash setup.sh\n\nChoose 1 to install Cinference and download fafstmobel NVFP4/FP8.\nChoose 2 to download or resume the model download.\nChoose 3 to start the server with the manifest profile (bundled DFlash2).\nServing requires Linux x86_64 and an RTX 5090 with working NVIDIA drivers.\nAllow about 23.8 GB for model files, plus software and download working space.\n'
+  printf 'Usage: bash setup.sh [--update]\n\nChoose 1 to install Cinference and download fafstmobel NVFP4/FP8.\nChoose 2 to download or resume the model download.\nChoose 3 to start the server with the manifest profile (bundled DFlash2).\nChoose 4, or run bash setup.sh --update, to update this installer, rebuild the\nruntime at its new pin, and replace model files that no longer match the new\npin (they are moved to models/fafstmobel.previous-<time>/, not deleted).\nServing requires Linux x86_64 and an RTX 5090 with working NVIDIA drivers.\nAllow about 22.9 GB for model files, plus software and download working space.\n'
   exit 0
 fi
-if [[ $# -ne 0 || ! -t 0 ]]; then
+# --update-continue is internal: after --update (or option 4) pulls the installer, the pulled
+# setup.sh finishes the update, then shows the menu if --menu follows. Keep accepting it, so
+# older copies can hand an update over to newer ones.
+update=""
+show_menu=1
+case "$*" in
+  "") ;;
+  --update) update=pull; show_menu=0 ;;
+  --update-continue) update=continue; show_menu=0 ;;
+  "--update-continue --menu") update=continue ;;
+  *)
+    echo "Unexpected arguments; use bash setup.sh --help for usage." >&2
+    exit 2
+    ;;
+esac
+if [[ ! -t 0 ]]; then
   echo "Run bash setup.sh in an interactive terminal (or use --help)." >&2
   exit 2
 fi
@@ -19,7 +34,11 @@ interrupt_setup() {
     kill -TERM -- "-$active_step" 2>/dev/null || true
     wait "$active_step" 2>/dev/null || true
   fi
-  printf '\nInterrupted. Choose 1 to continue installation or 2 to resume the download.\n'
+  if [[ -n "$update" ]]; then
+    printf '\nInterrupted. Run the update again to continue it.\n'
+  else
+    printf '\nInterrupted. Choose 1 to continue installation or 2 to resume the download.\n'
+  fi
   exit 130
 }
 trap interrupt_setup INT
@@ -148,16 +167,78 @@ download_models() {
   run_step "$ROOT/.venv/bin/python" "$ROOT/scripts/download_models.py"
 }
 
-install_everything() {
+build_and_download() {
+  # Arguments go to download_models.py.
   check_hardware || return 1
   ensure_system_tools || return 1
   ensure_uv || return 1
   printf '\n[1/2] Installing local tools and building the pinned Cinference runtime...\n'
   run_step bash "$ROOT/scripts/install.sh" || return 1
   printf '\n[2/2] Downloading and verifying fafstmobel and its licenses...\n'
-  run_step "$ROOT/.venv/bin/python" "$ROOT/scripts/download_models.py" || return 1
+  run_step "$ROOT/.venv/bin/python" "$ROOT/scripts/download_models.py" "$@"
+}
+
+install_everything() {
+  build_and_download || return 1
   printf '\nInstallation complete. Choose 3 to start the server.\n'
 }
+
+# Fast-forwards this clone to the published installer, whose manifest pins the current runtime
+# and model. Local edits that the update does not touch are kept.
+update_installer() {
+  local top before after
+  if ! command -v git >/dev/null; then
+    echo "Missing git. Install it, then run the update again." >&2
+    return 1
+  fi
+  top="$(git -C "$ROOT" rev-parse --show-toplevel 2>/dev/null)" || top=""
+  if [[ -z "$top" || ! "$top" -ef "$ROOT" ]]; then
+    echo "This folder is not a git clone of the installer, so it cannot update itself." >&2
+    echo "Clone https://github.com/satellitedown/fafstmobel-cinference and install from it." >&2
+    return 1
+  fi
+  before="$(git -C "$ROOT" rev-parse HEAD)" || return 1
+  printf '\nFetching the latest installer...\n'
+  git -C "$ROOT" fetch --quiet origin main || return 1
+  if ! git -C "$ROOT" merge --quiet --ff-only FETCH_HEAD; then
+    echo "Local commits or edits in this folder conflict with the update; nothing was changed." >&2
+    echo "Review them with git status, save or undo them, then run the update again." >&2
+    return 1
+  fi
+  after="$(git -C "$ROOT" rev-parse HEAD)" || return 1
+  if [[ "$after" == "$before" ]]; then
+    echo "The installer is already up to date."
+  else
+    printf 'Installer updated from %s to %s:\n' "${before:0:7}" "${after:0:7}"
+    git -C "$ROOT" log -n 10 --format='  %s' "$before..$after" || true
+  fi
+}
+
+# Builds the runtime this installer pins and moves model files that do not match its pin aside.
+finish_update() {
+  build_and_download --set-aside-mismatched || return 1
+  if [[ "$show_menu" == 1 ]]; then
+    printf '\nUpdate complete. Choose 3 to start the server; restart one that is already running.\n'
+  else
+    printf '\nUpdate complete. Start the server with bash setup.sh, option 3; restart one that is already running.\n'
+  fi
+}
+
+if [[ "$update" == pull ]]; then
+  if ! update_installer; then
+    printf '\nUpdate did not finish. Fix the error above, then run it again.\n' >&2
+    exit 1
+  fi
+  exec bash "$ROOT/setup.sh" --update-continue
+fi
+if [[ "$update" == continue ]]; then
+  if ! finish_update; then
+    printf '\nUpdate did not finish. Fix the error above, then run it again.\n' >&2
+    [[ "$show_menu" == 1 ]] || exit 1
+  fi
+  [[ "$show_menu" == 1 ]] || exit 0
+  update=""
+fi
 
 while true; do
   printf '\nfafstmobel - Cinference\n'
@@ -165,8 +246,9 @@ while true; do
   printf '  1) Install everything (build + download)\n'
   printf '  2) Download / resume model\n'
   printf '  3) Start the server (Ctrl-C to stop)\n'
+  printf '  4) Update to the latest version\n'
   printf '  0) Exit\n\n'
-  printf 'Space: ~23.8 GB model files, plus software and download working space.\n'
+  printf 'Space: ~22.9 GB model files, plus software and download working space.\n'
   if ! read -r -p "Choose an option: " choice; then
     printf '\n'
     exit 0
@@ -189,7 +271,15 @@ while true; do
         exec bash "$ROOT/scripts/serve.sh"
       fi
       ;;
+    4)
+      update=pull
+      if update_installer; then
+        exec bash "$ROOT/setup.sh" --update-continue --menu
+      fi
+      update=""
+      printf '\nUpdate did not finish. Fix the error above, then choose 4 again.\n' >&2
+      ;;
     0|q|Q) exit 0 ;;
-    *) echo "Choose 1, 2, 3, or 0." ;;
+    *) echo "Choose 1, 2, 3, 4, or 0." ;;
   esac
 done

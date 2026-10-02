@@ -12,15 +12,16 @@ Open a terminal in this repository and run:
 bash setup.sh
 ```
 
-The same three-option workflow handles installation and serving:
+The same menu handles installation, updates, and serving:
 
 1. **Install everything (build + download):** check prerequisites, offer to install missing system build packages with permission, install local tools, build the pinned runtime, and download the model. Allow **~22.9 GB for model files**, plus software, build products, and download working space.
 2. **Download / resume model:** download the pinned artifact and metadata without compiling the runtime or installing CUDA. Interrupted downloads retain their local cache and can be resumed. Existing files are checksum-verified rather than silently replaced.
-3. **Start the server:** run in the foreground. Leave the terminal open while using the API; **Ctrl+C** stops it. Choose **0** to exit the menu.
+3. **Start the server:** run in the foreground. Leave the terminal open while using the API; **Ctrl+C** stops it.
+4. **Update:** bring this installer, the runtime, and the model to the latest published versions. `bash setup.sh --update` does the same without the menu.
 
-An interrupted install can be continued with option 1; an interrupted download with option 2. Existing modified runtime source, unexpected CUDA files, or mismatched model files are reported instead of reset or deleted. Review the error and move conflicting files aside yourself before retrying.
+Choose **0** to exit the menu. An interrupted install can be continued with option 1, an interrupted download with option 2, and an interrupted update by running it again. Existing modified runtime source, unexpected CUDA files, or mismatched model files are reported instead of reset or deleted. Review the error and move conflicting files aside yourself before retrying.
 
-Upgrading from an earlier pinned model: its files no longer match the new checksums. Move `models/fafstmobel/` aside (or delete it), then choose option 1 to rebuild the runtime at the new pin and download the new files.
+Updating pulls this installer from GitHub, rebuilds the runtime at its new pin, and checks the model files against the new checksums. Files that no longer match, such as an earlier model revision, are moved to `models/fafstmobel.previous-<time>/` and the pinned files are downloaded; nothing is deleted. The new model needs about 22.9 GB of free space while the old files are kept, and the update stops before downloading if there isn't enough. Delete the `previous` folder once the new model works, and restart a running server to use the update. A copy of this installer whose menu has no option 4 needs `git pull origin main` once first.
 
 By default, everything lives inside this checkout: `.tools/`, `.venv/`, `.cuda-toolkit/`, `runtime/ninfer/`, and `models/fafstmobel/`. The isolated CUDA SDK is pinned to **13.4.92**, with Release builds limited to two jobs; it does not depend on a separate model-building project or system CUDA toolkit. System compilers, NVIDIA driver libraries, FFmpeg development libraries, and libcurl >= 7.85 remain prerequisites.
 

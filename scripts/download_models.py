@@ -6,9 +6,13 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import shutil
 import stat
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
+# Free space required beyond the artifact itself: the metadata files and filesystem overhead.
+SPACE_MARGIN = 64 << 20
 
 
 def require_file(path):
@@ -16,14 +20,57 @@ def require_file(path):
         raise ValueError(f"Expected a regular, non-symlink file: {path}")
 
 
+def file_digest(path):
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
 def verify_file(path, expected):
     require_file(path)
-    with path.open("rb") as stream:
-        actual = hashlib.file_digest(stream, "sha256").hexdigest()
+    actual = file_digest(path)
     if actual != expected:
         raise ValueError(
             f"SHA-256 mismatch: {path}\nExpected {expected}; got {actual}.\n"
-            "Move the damaged, outdated, or unrelated file aside and retry; it was not overwritten."
+            "Move the damaged, outdated, or unrelated file aside and retry (bash setup.sh --update "
+            "moves such files aside for you); it was not overwritten."
+        )
+
+
+def file_matches(path, expected):
+    return not path.is_symlink() and path.is_file() and file_digest(path) == expected
+
+
+def previous_directory(destination):
+    """Create a new sibling folder for files that no longer match the pin."""
+    stem = f"{destination.name}.previous-{time.strftime('%Y%m%d-%H%M%S')}"
+    for attempt in range(1, 100):
+        candidate = destination.with_name(stem if attempt == 1 else f"{stem}-{attempt}")
+        try:
+            candidate.mkdir()
+        except FileExistsError:
+            continue
+        return candidate
+    raise ValueError(f"Could not create a folder for the previous files next to {destination}.")
+
+
+def set_aside(path, target):
+    ensure_directory(target.parent)
+    try:
+        path.rename(target)
+    except OSError as error:
+        raise ValueError(
+            f"Could not move {path} to {target}: {error}.\n"
+            "Move it out of the model folder yourself and retry."
+        ) from error
+
+
+def require_space(destination, needed, previous):
+    free = shutil.disk_usage(destination).free
+    if free < needed + SPACE_MARGIN:
+        raise ValueError(
+            f"The pinned model needs {needed / 1e9:.1f} GB of free space; {free / 1e9:.1f} GB is "
+            f"free.\nThe files it replaces were moved to {previous}. Delete that folder if you no "
+            "longer need it, then run the update again."
         )
 
 
@@ -46,6 +93,13 @@ def verify_artifact(path, expected_size):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--models-dir", type=Path, default=ROOT / "models")
+    parser.add_argument(
+        "--set-aside-mismatched",
+        action="store_true",
+        help="move existing files that do not match the pinned checksums to "
+        "<model folder>.previous-<time>/ and download the pinned files instead of stopping; "
+        "nothing is deleted (bash setup.sh --update uses this)",
+    )
     args = parser.parse_args()
     manifest_path = ROOT / "runtime-manifest.json"
     require_file(manifest_path)
@@ -70,6 +124,8 @@ def main():
         print(f"fafstmobel: {model['repo_id']} @ {model['revision']}", flush=True)
         print("Verifying model file checksums...", flush=True)
         missing = []
+        set_aside_names = []
+        previous = None
         for name, digest in model["files"].items():
             parent = destination
             for part in Path(name).parent.parts:
@@ -77,10 +133,21 @@ def main():
                 ensure_directory(parent)
             path = destination / name
             if path.exists() or path.is_symlink():
-                verify_file(path, digest)
+                if not args.set_aside_mismatched:
+                    verify_file(path, digest)
+                elif not file_matches(path, digest):
+                    previous = previous or previous_directory(destination)
+                    set_aside(path, previous / name)
+                    print(f"Moved aside (does not match this pin): {name}", flush=True)
+                    set_aside_names.append(name)
+                    missing.append(name)
+                    continue
                 print(f"Verified: {name}", flush=True)
             else:
                 missing.append(name)
+        # The replaced artifact stays on disk, so its successor needs room beside it.
+        if model["filename"] in set_aside_names:
+            require_space(destination, model["size_bytes"], previous)
         if missing:
             from huggingface_hub import snapshot_download
 
@@ -99,6 +166,9 @@ def main():
                 print(f"Verified: {name}", flush=True)
         verify_artifact(destination / model["filename"], model["size_bytes"])
     print(f"Ready: {destination / model['filename']}", flush=True)
+    for kept in sorted(destination.parent.glob(f"{destination.name}.previous-*")):
+        print(f"Earlier model files are kept in {kept}; delete it once the new model works.",
+              flush=True)
     print("Download complete.", flush=True)
 
 
